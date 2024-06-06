@@ -15,7 +15,7 @@ This is a simple command-line based chat application built using Go and WebSocke
 
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/XDBerr/app-chat-go.git
+    git clone https://github.com/XDBerr/chat-app-go.git
     cd go-chat-app
     ```
 
