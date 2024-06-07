@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/exec"
 
 	"github.com/XDBerry29/chat-app-go/internal/cli"
 	"github.com/XDBerry29/chat-app-go/internal/network"
@@ -22,7 +23,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting local IP address: %v", err)
 	}
-	fmt.Print("\033[H\033[2J")
+	cmd := exec.Command("cmd", "/c", "cls")
+	cmd.Run()
 	fmt.Printf("Starting server on %s:%s\n", localIP, port)
 
 	go network.StartServer(port)

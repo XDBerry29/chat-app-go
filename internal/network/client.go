@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -50,7 +51,9 @@ func (c *Client) Listen() {
 	for {
 		select {
 		case msg := <-c.Incoming:
-			fmt.Printf("Message from %s: %s\n", c.Conn.RemoteAddr().String(), msg)
+			currtime := time.Now()
+
+			fmt.Printf("[%s] Message from %s: %s\n", currtime.Format(time.DateTime), c.Conn.RemoteAddr().String(), msg)
 		}
 	}
 }
