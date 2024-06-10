@@ -13,7 +13,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go-chat-app <port>")
+		fmt.Println("Usage: ./client <port>")
 		os.Exit(1)
 	}
 
@@ -23,6 +23,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting local IP address: %v", err)
 	}
+	// not working
 	cmd := exec.Command("cmd", "/c", "cls")
 	cmd.Run()
 	fmt.Printf("Starting server on %s:%s\n", localIP, port)

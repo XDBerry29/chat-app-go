@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -15,7 +14,7 @@ type Client struct {
 	Incoming chan string
 	Outgoing chan string
 
-	ID int
+	//ID int
 }
 
 func ConnectToServer(address, localIP, localPort string) *Client {
@@ -25,6 +24,9 @@ func ConnectToServer(address, localIP, localPort string) *Client {
 		log.Printf("Dial error: %v", err)
 		return nil
 	}
+
+	//client.ID = RegisterClient(client)
+	//fmt.Printf("Client.id = %d", client.ID)
 
 	client := NewClient(conn)
 	go client.Listen()
@@ -66,19 +68,15 @@ func (c *Client) readLoop() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("Read error: %v", err)
 			} else {
+				UnregisterClient(c)
 				log.Printf("Client disconnected from %s", c.Conn.RemoteAddr().String())
-				DisconnectClient(c.ID)
+
 			}
 			c.Conn.Close()
 			break
 		}
 		message := string(msg)
-		if strings.HasPrefix(message, "HANDSHAKE") {
-			fmt.Println("Handshake message received:", message)
-			// Handle handshake message if necessary
-		} else {
-			c.Incoming <- message
-		}
+		c.Incoming <- message
 	}
 }
 
@@ -92,8 +90,9 @@ func (c *Client) writeLoop() {
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 					log.Printf("Write error: %v", err)
 				} else {
-					log.Printf("Client blah disconnected from %s", c.Conn.RemoteAddr().String())
-					DisconnectClient(c.ID)
+					UnregisterClient(c)
+					log.Printf("Client disconnected from %s", c.Conn.RemoteAddr().String())
+
 				}
 				c.Conn.Close()
 				break

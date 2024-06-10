@@ -31,7 +31,8 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 
 	client := NewClient(ws)
 	fmt.Printf("New connection from %s\n", ws.RemoteAddr().String())
-	client.ID = RegisterClient(client)
+	//client.ID = RegisterClient(client)
+	RegisterClient(client)
+	//fmt.Printf("Client.id = %d", client.ID)
 	client.Listen()
-	UnregisterClient(client)
 }
